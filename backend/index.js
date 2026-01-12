@@ -2,7 +2,13 @@ const express = require('express');
 require('dotenv').config();
 const app = express();
 const {connectDB, sequelize} = require('./database/database');
+const cors = require("cors");
 
+// Allow requests from your React frontend
+app.use(cors({
+  origin: "http://localhost:5173", // React dev server
+  credentials: true,
+}));
 
 app.use(express.json());
 app.use("/api/user/", require("./routes/route"));
