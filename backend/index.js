@@ -17,6 +17,8 @@ app.get('/', (req, res) => {
     res.json('Welcome to the home page');
 });
 
+app.use("/api/questions", require("./routes/questionroute"));
+
 
 // app.listen(3000, () => {
 //     console.log('Server is running on http://localhost:3000');
