@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-// import { createUserApi } from "../services/api"; // Commented out to prevent build errors in preview
+import { createUserApi } from "../services/api";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -55,18 +55,12 @@ const Register = () => {
 
     setLoading(true);
     try {
-      /* DEVELOPER NOTE: 
-         In your local environment, use the actual API call:
-         const res = await createUserApi(formData);
-      */
-      
-      // Simulated API call for Preview stability
-      await new Promise((resolve) => setTimeout(resolve, 1500)); 
-      
-      toast.success("Registration successful 🎉");
+      const res = await createUserApi(formData);
+      toast.success(res.data.message || "Registration successful 🎉");
       navigate("/login");
     } catch (error) {
-      const msg = error.response?.data?.message || "Registration failed. Try again.";
+      const msg =
+        error.response?.data?.message || "Registration failed. Try again.";
       setServerError(msg);
       toast.error(msg);
     } finally {
@@ -75,19 +69,20 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       {/* Main Card */}
       <div className="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 w-full max-w-[420px] border border-slate-100 transition-all">
         
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            Create Account ✨
+            Create Account
           </h2>
           <p className="text-slate-500 mt-2 font-medium">
-            Join NeuroQuiz and start learning today
+            Register to start your NeuroQuiz journey
           </p>
         </div>
 
+        {/* Inline server error */}
         {serverError && (
           <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-100">
             <p className="text-red-600 text-xs text-center font-medium">{serverError}</p>
@@ -95,7 +90,8 @@ const Register = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username Field */}
+
+          {/* Username */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
               Username
@@ -115,7 +111,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Email Field */}
+          {/* Email */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
               Email Address
@@ -135,7 +131,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
               Password
@@ -164,7 +160,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Confirm Password Field */}
+          {/* Confirm Password */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
               Confirm Password
@@ -197,7 +193,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 mt-2 rounded-xl text-white font-bold
+            className="w-full py-3.5 mt-4 rounded-xl text-white font-bold
                        bg-blue-600 hover:bg-blue-700 
                        shadow-lg shadow-blue-200 active:scale-[0.98]
                        transition-all duration-200 flex justify-center items-center disabled:opacity-70"
@@ -208,10 +204,10 @@ const Register = () => {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Registering...
+                Creating Account...
               </>
             ) : (
-              "Create Account"
+              "Sign Up"
             )}
           </button>
         </form>
