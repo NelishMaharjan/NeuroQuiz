@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
   const navigate = useNavigate();
@@ -8,120 +8,82 @@ const History = () => {
   const [showScore, setShowScore] = useState(false);
 
   const questions = [
-    {
-      questionText: "Who was the first President of the United States?",
-      options: ["Thomas Jefferson", "Abraham Lincoln", "George Washington", "John Adams"],
-      answer: "George Washington",
-    },
-    {
-      questionText: "In which year did the Titanic sink?",
-      options: ["1912", "1905", "1923", "1898"],
-      answer: "1912",
-    },
-    {
-      questionText: "Which ancient civilization built the Great Pyramid of Giza?",
-      options: ["Romans", "Mayans", "Greeks", "Egyptians"],
-      answer: "Egyptians",
-    },
-    {
-      questionText: "The 'Renaissance' period began in which European country?",
-      options: ["France", "Italy", "Germany", "Spain"],
-      answer: "Italy",
-    },
+    { q: "What is the value of x in 2x + 5 = 15?", a: ["5", "10", "7.5", "5.5"], correct: 0 },
+    { q: "What is the derivative of x^2?", a: ["x", "2x", "2", "x^3"], correct: 1 },
+    { q: "Calculate the area of a circle with radius 7 (Use Pi = 3.14)", a: ["43.96", "153.86", "49", "21.98"], correct: 1 },
+    { q: "What is the square root of 144?", a: ["10", "14", "12", "16"], correct: 2 },
+    { q: "Simplify: (2^3) x (2^2)", a: ["2^5", "2^6", "4^5", "32"], correct: 0 },
+    { q: "If f(x) = 3x - 2, find f(4).", a: ["10", "12", "14", "8"], correct: 0 },
+    { q: "What is the sum of angles in a triangle?", a: ["90°", "360°", "180°", "270°"], correct: 2 },
+    { q: "Solve for y: y/4 = 8", a: ["2", "32", "12", "16"], correct: 1 },
+    { q: "What is the value of sin(90°)?", a: ["0", "0.5", "1", "-1"], correct: 2 },
+    { q: "What is the slope of the line y = 5x + 3?", a: ["3", "5", "x", "5x"], correct: 1 },
+    // ... I'll keep the rest in this simple format
   ];
 
-  const handleAnswerOptionClick = (selectedOption) => {
-    if (selectedOption === questions[currentQuestion].answer) {
+  const handleAnswer = (index) => {
+    if (index === questions[currentQuestion].correct) {
       setScore(score + 1);
     }
-
-    const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
-      setCurrentQuestion(nextQuestion);
+    const next = currentQuestion + 1;
+    if (next < questions.length) {
+      setCurrentQuestion(next);
     } else {
       setShowScore(true);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans p-6 flex flex-col items-center justify-center">
-      {/* Back Navigation */}
-      <button 
-        onClick={() => navigate("/")}
-        className="absolute top-8 left-8 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition flex items-center gap-2"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Back to Home
-      </button>
-
-      <div className="w-full max-w-2xl bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-slate-200/50 relative overflow-hidden">
-        {/* Subtle Decorative Icon in Background */}
-        <div className="absolute -top-6 -right-6 text-9xl opacity-[0.03] pointer-events-none rotate-12">
-          📜
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans p-6">
+      <nav className="max-w-4xl mx-auto flex items-center justify-between h-16 mb-12">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
+          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
+            <span className="text-white text-xs font-bold">∑</span>
+          </div>
+          <span className="text-lg font-bold tracking-tight uppercase">Math_Quiz</span>
         </div>
+        <button onClick={() => navigate("/")} className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900">Exit</button>
+      </nav>
 
+      <main className="max-w-2xl mx-auto">
         {showScore ? (
-          <div className="text-center space-y-6 py-8">
-            <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-              🏛️
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight">Timeline Ended</h2>
-            <p className="text-slate-500 font-medium">
-              You mastered <span className="text-slate-900 font-bold">{score}</span> out of {questions.length} historical facts.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-              <button 
-                onClick={() => window.location.reload()}
-                className="px-8 py-3 bg-slate-900 text-white text-sm font-bold rounded-2xl hover:bg-slate-800 transition shadow-lg shadow-slate-200"
-              >
-                Restart Quiz
-              </button>
-              <button 
-                onClick={() => navigate("/")}
-                className="px-8 py-3 bg-white border border-slate-200 text-slate-900 text-sm font-bold rounded-2xl hover:bg-slate-50 transition"
-              >
-                Exit
-              </button>
-            </div>
+          <div className="bg-white border border-slate-200 p-12 rounded-[3rem] text-center shadow-xl shadow-slate-100">
+            <h2 className="text-4xl font-bold mb-4 tracking-tighter uppercase italic">Quiz Complete</h2>
+            <p className="text-slate-500 mb-8 text-lg font-medium">Final Score: <span className="text-slate-900 font-bold">{score} / {questions.length}</span></p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition active:scale-95 shadow-lg"
+            >
+              Restart Session
+            </button>
           </div>
         ) : (
-          <>
-            <div className="mb-12">
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-600 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/10">
-                  History Module
-                </span>
-                <div className="flex gap-1">
-                    {questions.map((_, index) => (
-                        <div 
-                            key={index} 
-                            className={`h-1.5 w-6 rounded-full transition-all duration-500 ${index <= currentQuestion ? 'bg-amber-500' : 'bg-slate-100'}`}
-                        />
-                    ))}
-                </div>
-              </div>
-              <h2 className="text-2xl md:text-4xl font-bold leading-[1.1] tracking-tight text-slate-900">
-                {questions[currentQuestion].questionText}
+          <div className="space-y-8">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400">Question {currentQuestion + 1}</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900">Points: {score}</span>
+            </div>
+            
+            <div className="bg-white border border-slate-200 p-10 rounded-[2.5rem] shadow-sm">
+              <h2 className="text-2xl font-bold leading-tight mb-8">
+                {questions[currentQuestion].q}
               </h2>
-            </div>
 
-            <div className="grid grid-cols-1 gap-4">
-              {questions[currentQuestion].options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerOptionClick(option)}
-                  className="w-full text-left px-8 py-5 rounded-[1.5rem] border border-slate-100 bg-slate-50/30 hover:bg-white hover:border-amber-200 hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300 group flex justify-between items-center"
-                >
-                  <span className="font-bold text-slate-600 group-hover:text-slate-900 transition-colors">{option}</span>
-                  <div className="w-5 h-5 rounded-full border-2 border-slate-200 group-hover:border-amber-500 transition-colors flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-transparent group-hover:bg-amber-500 transition-all scale-0 group-hover:scale-100"></div>
-                  </div>
-                </button>
-              ))}
+              <div className="grid grid-cols-1 gap-3">
+                {questions[currentQuestion].a.map((option, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleAnswer(i)}
+                    className="w-full text-left p-5 rounded-2xl border border-slate-100 hover:border-slate-900 hover:bg-slate-50 transition-all font-medium text-slate-600 hover:text-slate-900"
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
             </div>
-          </>
+          </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

@@ -119,8 +119,8 @@ const Home = () => {
         <div className="max-w-6xl mx-auto px-6 mt-32">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Active Modules</h2>
-              <p className="text-slate-400 text-sm mt-1">Directly solve questions added by the admin.</p>
+              <h2 className="text-3xl font-bold tracking-tight">Test Your Knowledge</h2>
+              <p className="text-slate-400 text-sm mt-1">Directly solve random questions</p>
             </div>
           </div>
           
