@@ -5,7 +5,13 @@ import { Toaster } from "react-hot-toast";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile"; // 🔥 Added Profile
+import Profile from "./pages/Profile";
+
+// Discovery/Quiz pages
+import Science from "./discovery/Science";
+import Technology from "./discovery/Technology";
+import History from "./discovery/History";
+import Geography from "./discovery/Geography";
 
 // Admin pages
 import Dashboard from "./admin/Dashboard";
@@ -19,7 +25,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <Router>
-      {/* Toast notifications with custom styling */}
       <Toaster 
         position="top-right" 
         toastOptions={{
@@ -38,7 +43,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* Profile is protected so only logged-in users can see it */}
+        {/* --- Discovery Routes --- */}
+        <Route path="/science" element={<Science />} />
+        <Route path="/technology" element={<Technology />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/geography" element={<Geography />} />
+        
+        {/* Profile is protected */}
         <Route 
           path="/profile" 
           element={
@@ -49,7 +60,6 @@ function App() {
         />
 
         {/* --- Admin Routes (Protected) --- */}
-        {/* Using nested routes for cleaner structure */}
         <Route path="/admin">
           <Route
             path="dashboard"
@@ -59,7 +69,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="questions"
             element={
@@ -68,7 +77,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="questions/add"
             element={
@@ -77,7 +85,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="questions/edit/:id"
             element={
@@ -88,8 +95,14 @@ function App() {
           />
         </Route>
 
-        {/* 404 - Redirect or Page Not Found (Optional) */}
-        <Route path="*" element={<div className="flex items-center justify-center min-h-screen">404 - Page Not Found</div>} />
+        {/* 404 - Page Not Found */}
+        <Route path="*" element={
+          <div className="flex flex-col items-center justify-center min-h-screen bg-[#fafafa]">
+            <h1 className="text-4xl font-black text-slate-900">404</h1>
+            <p className="text-slate-500 font-medium">Page not found.</p>
+            <button onClick={() => window.location.href="/"} className="mt-4 text-blue-600 font-bold uppercase text-[10px] tracking-widest">Return Home</button>
+          </div>
+        } />
       </Routes>
     </Router>
   );
