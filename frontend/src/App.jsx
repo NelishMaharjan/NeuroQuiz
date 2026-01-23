@@ -6,8 +6,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Quiz from "./pages/Quiz"; // 🔥 Added
+import Result from "./pages/Result"; // 🔥 Added
 
-// Discovery/Quiz pages
+// Discovery/Quiz pages (Static Frontend)
 import Science from "./discovery/Science";
 import Technology from "./discovery/Technology";
 import History from "./discovery/History";
@@ -43,7 +45,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* --- Discovery Routes --- */}
+        {/* --- Dynamic User Quiz Routes --- */}
+        {/* These handle questions added by the Admin via the backend */}
+        <Route path="/quiz/:categoryName" element={<Quiz />} />
+        <Route path="/result" element={<Result />} />
+        
+        {/* --- Discovery Routes (Hardcoded Frontend) --- */}
         <Route path="/science" element={<Science />} />
         <Route path="/technology" element={<Technology />} />
         <Route path="/history" element={<History />} />

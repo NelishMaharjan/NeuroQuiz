@@ -5,10 +5,17 @@ const {
   getQuestionById,
   updateQuestion,
   deleteQuestion,
+  getQuestionsByCategory, 
 } = require("../controllers/questionController");
 
-router.post("/add", addQuestion);
+// Basic List & Add
 router.get("/", getAllQuestions);
+router.post("/add", addQuestion);
+
+// Specialized Filter
+router.get("/category/:category", getQuestionsByCategory);
+
+// ID Specific
 router.get("/:id", getQuestionById);
 router.put("/:id", updateQuestion);
 router.delete("/:id", deleteQuestion);

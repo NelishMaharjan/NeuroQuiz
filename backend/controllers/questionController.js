@@ -1,5 +1,17 @@
 const { Question } = require("../database/database");
 
+// NEW: READ BY CATEGORY (For User "Join with Code")
+exports.getQuestionsByCategory = async (req, res) => {
+  try {
+    const questions = await Question.findAll({
+      where: { category: req.params.category }
+    });
+    res.json(questions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // CREATE
 exports.addQuestion = async (req, res) => {
   try {
@@ -12,8 +24,12 @@ exports.addQuestion = async (req, res) => {
 
 // READ ALL
 exports.getAllQuestions = async (req, res) => {
-  const questions = await Question.findAll();
-  res.json(questions);
+  try {
+    const questions = await Question.findAll();
+    res.json(questions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 // READ ONE

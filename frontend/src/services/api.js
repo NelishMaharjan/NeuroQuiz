@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+  // Ensure this matches your server.js port (3000)
+  baseURL: "http://localhost:3000", 
   headers: {
     "Content-Type": "application/json",
   },
@@ -9,34 +10,36 @@ const API = axios.create({
 
 /* ================= AUTH ================= */
 
-// LOGIN
 export const loginUserApi = (data) =>
   API.post("/api/user/login", data);
 
-// REGISTER
 export const createUserApi = (data) =>
   API.post("/api/user/register", data);
 
 
 /* ================= QUESTIONS ================= */
 
-// GET ALL QUESTIONS
+// 1. GET ALL QUESTIONS (Used by Admin List)
 export const getAllQuestionsApi = () =>
   API.get("/api/questions");
 
-// GET QUESTION BY ID
+// 2. 🔥 ADD THIS: GET QUESTIONS BY CATEGORY (Used by Quiz page "Join with Code")
+export const getQuestionsByCategoryApi = (category) =>
+  API.get(`/api/questions/category/${category}`);
+
+// 3. GET QUESTION BY ID
 export const getQuestionByIdApi = (id) =>
   API.get(`/api/questions/${id}`);
 
-// ADD QUESTION
+// 4. ADD QUESTION
 export const createQuestionApi = (data) =>
   API.post("/api/questions/add", data);
 
-// UPDATE QUESTION
+// 5. UPDATE QUESTION
 export const updateQuestionApi = (id, data) =>
   API.put(`/api/questions/${id}`, data);
 
-// DELETE QUESTION
+// 6. DELETE QUESTION
 export const deleteQuestionApi = (id) =>
   API.delete(`/api/questions/${id}`);
 
