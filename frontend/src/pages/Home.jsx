@@ -109,7 +109,7 @@ const Home = () => {
               onClick={() => navigate("/admin/dashboard")}
               className="w-full sm:w-auto px-10 py-3.5 bg-slate-900 text-white text-sm font-bold rounded-2xl hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
             >
-              Admin Dashboard
+              Create Questions
             </button>
             
           </div>

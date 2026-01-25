@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getAllQuestionsApi, deleteQuestionApi } from "../services/api";
+// import Navbar from "../components/Navbar";
 
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
@@ -25,11 +26,10 @@ const QuestionList = () => {
     fetchQuestions();
   }, []);
 
-  // Sorting and Filtering Logic
   const processedQuestions = useMemo(() => {
     let filtered = questions.filter((q) => {
       const qText = (q.questionText || q.question || "").toLowerCase();
-      const cat = (typeof q.category === 'object' ? q.category?.name : q.category || "").toLowerCase();
+      const cat = (typeof q.category === "object" ? q.category?.name : q.category || "").toLowerCase();
       return qText.includes(searchTerm.toLowerCase()) || cat.includes(searchTerm.toLowerCase());
     });
 
@@ -37,14 +37,18 @@ const QuestionList = () => {
       filtered.sort((a, b) => {
         let aVal = a[sortConfig.key] || "";
         let bVal = b[sortConfig.key] || "";
+
         if (sortConfig.key === "category" && typeof aVal === "object") aVal = aVal.name || "";
         if (sortConfig.key === "category" && typeof bVal === "object") bVal = bVal.name || "";
 
-        if (aVal.toString().toLowerCase() < bVal.toString().toLowerCase()) return sortConfig.direction === "asc" ? -1 : 1;
-        if (aVal.toString().toLowerCase() > bVal.toString().toLowerCase()) return sortConfig.direction === "asc" ? 1 : -1;
+        if (aVal.toString().toLowerCase() < bVal.toString().toLowerCase())
+          return sortConfig.direction === "asc" ? -1 : 1;
+        if (aVal.toString().toLowerCase() > bVal.toString().toLowerCase())
+          return sortConfig.direction === "asc" ? 1 : -1;
         return 0;
       });
     }
+
     return filtered;
   }, [questions, searchTerm, sortConfig]);
 
@@ -62,7 +66,7 @@ const QuestionList = () => {
       await deleteQuestionApi(id);
       toast.success("Question deleted successfully");
       fetchQuestions();
-    } catch (error) {
+    } catch {
       toast.error("Delete failed");
     }
   };
@@ -77,118 +81,102 @@ const QuestionList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] p-6 md:p-10 font-sans">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/admin/dashboard")}
-          className="group mb-6 flex items-center text-sm font-semibold text-gray-500 hover:text-slate-900 transition-colors"
-        >
-          <svg className="h-5 w-5 mr-2 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Dashboard
-        </button>
+    <>
+      {/* 🔥 NAVBAR GOES HERE */}
+      {/* <Navbar /> */}
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Question Bank</h1>
-            <p className="text-slate-500 mt-1">Manage and organize your quiz content.</p>
-          </div>
+      <div className="min-h-screen bg-[#f8fafc] p-6 md:p-10 font-sans">
+        <div className="max-w-6xl mx-auto">
+
+          {/* Back Button */}
           <button
-            onClick={() => navigate("/admin/questions/add")}
-            className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 active:scale-95"
+            onClick={() => navigate("/admin/dashboard")}
+            className="group mb-6 flex items-center text-sm font-semibold text-gray-500 hover:text-slate-900 transition-colors"
           >
-            + Add New Question
+            ← Back to Dashboard
           </button>
-        </div>
 
-        {/* Search Bar */}
-        <div className="mb-6">
-          <input 
-            type="text" 
-            placeholder="Search by question or category..." 
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+                Question Bank
+              </h1>
+              <p className="text-slate-500 mt-1">
+                Manage and organize your quiz content.
+              </p>
+            </div>
+            <button
+              onClick={() => navigate("/admin/questions/add")}
+              className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg active:scale-95"
+            >
+              + Add New Question
+            </button>
+          </div>
+
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search by question or category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full max-w-md px-5 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-slate-100 focus:border-slate-900 transition-all text-sm"
+            className="mb-6 w-full max-w-md px-5 py-3 bg-white border border-slate-200 rounded-xl"
           />
-        </div>
 
-        {/* Table Container */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
-                  <th 
+          {/* Table */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th
                     onClick={() => requestSort("questionText")}
-                    className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-900"
+                    className="p-4 text-xs font-bold uppercase cursor-pointer"
                   >
-                    Question Details {sortConfig.key === "questionText" && (sortConfig.direction === "asc" ? "↑" : "↓")}
+                    Question
                   </th>
-                  <th 
+                  <th
                     onClick={() => requestSort("category")}
-                    className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-900 w-40"
+                    className="p-4 text-xs font-bold uppercase cursor-pointer"
                   >
-                    Category {sortConfig.key === "category" && (sortConfig.direction === "asc" ? "↑" : "↓")}
+                    Category
                   </th>
-                  <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right w-48">Actions</th>
+                  <th className="p-4 text-xs font-bold uppercase text-right">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-slate-100">
-                {processedQuestions.length === 0 ? (
-                  <tr>
-                    <td colSpan="3" className="text-center py-20">
-                      <p className="text-slate-400 font-medium">No questions matching your search.</p>
+              <tbody>
+                {processedQuestions.map((q) => (
+                  <tr key={q.id || q._id} className="border-t">
+                    <td className="p-4">{q.questionText || q.question}</td>
+                    <td className="p-4">{typeof q.category === "object" ? q.category?.name : q.category}</td>
+                    <td className="p-4 text-right space-x-3">
+                      <button
+                        onClick={() => navigate(`/admin/questions/edit/${q.id || q._id}`)}
+                        className="font-bold text-slate-600"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(q.id || q._id)}
+                        className="font-bold text-red-500"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
-                ) : (
-                  processedQuestions.map((q) => (
-                    <tr key={q.id || q._id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="p-4">
-                        <p className="text-slate-800 font-medium line-clamp-2 max-w-lg">
-                          {q.questionText || q.question || "Untitled Question"}
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
-                          {typeof q.category === 'object' ? q.category?.name : q.category || "General"}
-                        </span>
-                      </td>
-                      <td className="p-4 text-right">
-                        <div className="flex justify-end gap-2">
-                          <button
-                            onClick={() => navigate(`/admin/questions/edit/${q.id || q._id}`)}
-                            className="px-4 py-1.5 text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(q.id || q._id)}
-                            className="px-4 py-1.5 text-sm font-bold text-red-500 hover:text-red-700 transition-colors"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
-          </div>
-          
-          <div className="p-4 bg-slate-50 border-t border-slate-200 text-center">
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
+
+            <div className="p-4 text-center text-xs font-bold text-slate-400">
               Total Questions: {processedQuestions.length}
-            </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
