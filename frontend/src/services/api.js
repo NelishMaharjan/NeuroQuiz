@@ -16,6 +16,9 @@ export const loginUserApi = (data) =>
 export const createUserApi = (data) =>
   API.post("/api/user/register", data);
 
+export const updateUserApi = (id, data) =>
+  API.put(`/api/user/update/${id}`, data);
+
 
 /* ================= QUESTIONS ================= */
 

@@ -26,7 +26,7 @@ const Dashboard = () => {
       {/* Subtle Background Layer */}
       <div className="absolute top-0 right-0 w-full h-96 bg-gradient-to-b from-slate-100/40 to-transparent -z-10"></div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12 lg:px-12">
+      <div className="max-w-7xl mx-auto px-6 pt-24 pb-12 lg:px-12">
         
         {/* 1. HEADER SECTION */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">

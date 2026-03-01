@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { createUserApi } from "../services/api";
+import InputField from "../components/InputField";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -59,8 +60,7 @@ const Register = () => {
       toast.success(res.data.message || "Registration successful 🎉");
       navigate("/login");
     } catch (error) {
-      const msg =
-        error.response?.data?.message || "Registration failed. Try again.";
+      const msg = error.response?.data?.message || "Registration failed. Try again.";
       setServerError(msg);
       toast.error(msg);
     } finally {
@@ -69,159 +69,105 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-      {/* Main Card */}
-      <div className="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 w-full max-w-[420px] border border-slate-100 transition-all">
-        
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            Create Account
-          </h2>
-          <p className="text-slate-500 mt-2 font-medium">
-            Register to start your NeuroQuiz journey
-          </p>
-        </div>
-
-        {/* Inline server error */}
-        {serverError && (
-          <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-100">
-            <p className="text-red-600 text-xs text-center font-medium">{serverError}</p>
+    <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-4 font-sans pt-16">
+      <div className="w-full max-w-[440px] animate-fadeIn">
+        <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-200/50">
+          <div className="mb-10 text-center">
+            <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-slate-900/20">
+              <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-white" stroke="currentColor" strokeWidth="3">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-none">
+              Create account
+            </h2>
+            <p className="text-slate-400 mt-3 text-sm font-medium">
+              Join NeuroQuiz to start your journey
+            </p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+          {serverError && (
+            <div className="mb-8 p-4 rounded-2xl bg-red-50 border border-red-100/50">
+              <p className="text-red-600 text-[11px] text-center font-bold uppercase tracking-wider">
+                {serverError}
+              </p>
+            </div>
+          )}
 
-          {/* Username */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
-              Username
-            </label>
-            <input
-              type="text"
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <InputField
+              label="Username"
               name="username"
               value={formData.username}
               onChange={handleChange}
               placeholder="johndoe"
-              className={`w-full px-4 py-3 rounded-xl border text-slate-800 bg-slate-50/50
-                ${errors.username ? "border-red-400 ring-1 ring-red-400" : "border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"}
-                outline-none transition-all duration-200`}
+              error={errors.username}
             />
-            {errors.username && (
-              <p className="text-red-500 text-xs mt-1.5 ml-1 font-medium">{errors.username}</p>
-            )}
-          </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
-              Email Address
-            </label>
-            <input
-              type="email"
+            <InputField
+              label="Email Address"
               name="email"
+              type="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="name@company.com"
-              className={`w-full px-4 py-3 rounded-xl border text-slate-800 bg-slate-50/50
-                ${errors.email ? "border-red-400 ring-1 ring-red-400" : "border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"}
-                outline-none transition-all duration-200`}
+              error={errors.email}
             />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1.5 ml-1 font-medium">{errors.email}</p>
-            )}
-          </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className={`w-full px-4 py-3 rounded-xl border text-slate-800 bg-slate-50/50
-                  ${errors.password ? "border-red-400 ring-1 ring-red-400" : "border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"}
-                  outline-none transition-all duration-200`}
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold uppercase tracking-wider"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1.5 ml-1 font-medium">{errors.password}</p>
-            )}
-          </div>
+            <InputField
+              label="Password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="••••••••"
+              error={errors.password}
+              showPasswordToggle
+              onTogglePassword={() => setShowPassword(!showPassword)}
+            />
 
-          {/* Confirm Password */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirm ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className={`w-full px-4 py-3 rounded-xl border text-slate-800 bg-slate-50/50
-                  ${errors.confirmPassword ? "border-red-400 ring-1 ring-red-400" : "border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"}
-                  outline-none transition-all duration-200`}
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold uppercase tracking-wider"
-                onClick={() => setShowConfirm(!showConfirm)}
-              >
-                {showConfirm ? "Hide" : "Show"}
-              </button>
-            </div>
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-xs mt-1.5 ml-1 font-medium">{errors.confirmPassword}</p>
-            )}
-          </div>
+            <InputField
+              label="Confirm Password"
+              name="confirmPassword"
+              type={showConfirm ? "text" : "password"}
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="••••••••"
+              error={errors.confirmPassword}
+              showPasswordToggle
+              onTogglePassword={() => setShowConfirm(!showConfirm)}
+            />
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3.5 mt-4 rounded-xl text-white font-bold
-                       bg-blue-600 hover:bg-blue-700 
-                       shadow-lg shadow-blue-200 active:scale-[0.98]
-                       transition-all duration-200 flex justify-center items-center disabled:opacity-70"
-          >
-            {loading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Creating Account...
-              </>
-            ) : (
-              "Sign Up"
-            )}
-          </button>
-        </form>
-
-        <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-          <p className="text-sm text-slate-500">
-            Already have an account?{" "}
             <button
-              onClick={() => navigate("/login")}
-              className="text-blue-600 font-bold hover:text-blue-700 transition-colors"
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 mt-4 rounded-2xl text-white font-bold
+                         bg-slate-900 hover:bg-slate-800
+                         shadow-xl shadow-slate-900/10 active:scale-[0.98]
+                         transition-all duration-200 flex justify-center items-center disabled:opacity-70"
             >
-              Sign in
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span className="text-xs uppercase tracking-widest">Creating...</span>
+                </div>
+              ) : (
+                <span className="text-xs uppercase tracking-widest">Sign Up</span>
+              )}
             </button>
-          </p>
+          </form>
+
+          <div className="mt-10 pt-8 border-t border-slate-100 text-center">
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+              Already have an account?{" "}
+              <button
+                onClick={() => navigate("/login")}
+                className="text-slate-900 hover:underline transition-all underline-offset-4"
+              >
+                Sign In
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

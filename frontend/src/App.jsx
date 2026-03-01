@@ -23,10 +23,12 @@ import EditQuestion from "./admin/EditQuestion";
 
 // Protected route component
 import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <Toaster 
         position="top-right" 
         toastOptions={{
