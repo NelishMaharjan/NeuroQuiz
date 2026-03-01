@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getActiveUsersApi } from "../services/api";
+import { getActiveUsersApi, deleteUserApi } from "../services/api";
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
 
@@ -19,7 +19,19 @@ const DeveloperDashboard = () => {
     }
   };
 
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm("TERMINATE USER? This cannot be undone.")) return;
+    try {
+      await deleteUserApi(id);
+      toast.success("Neural link severed (User Deleted)");
+      fetchActiveUsers();
+    } catch (err) {
+      toast.error("Failed to delete user");
+    }
+  };
+
   const onlineCount = activeUsers.filter(u => u.isOnline).length;
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchActiveUsers();
@@ -137,16 +149,32 @@ const DeveloperDashboard = () => {
                       </p>
                     </td>
                     <td className="px-10 py-6 text-right">
-                      {user.isOnline ? (
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-emerald-100">
-                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                          Online
-                        </div>
-                      ) : (
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 text-slate-400 rounded-lg text-[10px] font-black uppercase tracking-widest border border-slate-100">
-                          Offline
-                        </div>
-                      )}
+                        <div className="flex items-center justify-end gap-4">
+                        {user.isOnline ? (
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-emerald-100">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                            Online
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 text-slate-400 rounded-lg text-[10px] font-black uppercase tracking-widest border border-slate-100">
+                            Offline
+                          </div>
+                        )}
+                        
+                        {currentUser?.id !== user.id ? (
+                          <button 
+                            onClick={() => handleDeleteUser(user.id)}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-slate-300 hover:bg-red-500 hover:text-white transition-all border border-transparent"
+                            title="Delete User"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          </button>
+                        ) : (
+                          <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-50 text-indigo-400" title="You (Developer)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                          </div>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

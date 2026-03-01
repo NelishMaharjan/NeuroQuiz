@@ -25,6 +25,9 @@ export const logoutUserApi = (id) =>
 export const getActiveUsersApi = () =>
   API.get("/api/user/getactiveusers");
 
+export const deleteUserApi = (id) =>
+  API.delete(`/api/user/delete/${id}`);
+
 export const forgotPasswordApi = (data) =>
   API.post("/api/user/forgot-password", data);
 

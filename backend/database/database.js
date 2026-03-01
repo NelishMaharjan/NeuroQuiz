@@ -1,18 +1,28 @@
+require("dotenv").config({ override: true });
 const { Sequelize, DataTypes } = require("sequelize");
-require("dotenv").config();
 
-const isTestEnvironment = process.env.NODE_ENV === "test";
-console.log(`Running in ${isTestEnvironment ? "TEST" : "DEVELOPMENT"} mode.`);
+const env = (process.env.NODE_ENV || "development").trim();
+const isTestEnvironment = env === "test";
+
+const dbName = (isTestEnvironment ? process.env.TEST_DB_NAME : process.env.DB_NAME).trim();
+const dbUser = process.env.DB_USER.trim();
+const dbPass = process.env.DB_PASS.trim();
+const dbHost = process.env.DB_HOST.trim();
+
+console.log(`-----------------------------------------------`);
+console.log(`MODE: ${env}`);
+console.log(`DATABASE: ${dbName}`);
+console.log(`-----------------------------------------------`);
 
 const sequelize = new Sequelize(
-  isTestEnvironment ? process.env.TEST_DB_NAME : process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
+  dbName,
+  dbUser,
+  dbPass,
   {
-    host: process.env.DB_HOST,
+    host: dbHost,
     dialect: "postgres",
     logging: false,
-    port: process.env.DB_PORT || 5432,
+    port: parseInt(process.env.DB_PORT) || 5432,
   }
 );
 

@@ -42,6 +42,7 @@ const Login = () => {
       const res = await loginUserApi(formData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("role", res.data.user.role);
       toast.success(res.data.message || "Login successful 🎉");
       navigate("/");
     } catch (error) {
