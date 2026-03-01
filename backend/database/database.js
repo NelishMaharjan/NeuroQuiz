@@ -28,13 +28,19 @@ const connectDB = async () => {
 
 // 🧠 IMPORT MODELS
 const QuestionModel = require("../models/questionModel");
+const UserModel = require("../models/userModel");
+const ResultModel = require("../models/resultModel");
 
 // 🧩 INIT MODELS
 const Question = QuestionModel(sequelize, DataTypes);
+const User = UserModel(sequelize, DataTypes);
+const Result = ResultModel(sequelize, DataTypes);
 
 // 📦 EXPORT EVERYTHING
 module.exports = {
   sequelize,
   connectDB,
   Question,
+  User,
+  Result,
 };

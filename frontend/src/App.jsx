@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
+import UserDashboard from "./pages/UserDashboard";
 import Quiz from "./pages/Quiz"; // 🔥 Added
 import Result from "./pages/Result"; // 🔥 Added
 
@@ -21,6 +22,7 @@ import Dashboard from "./admin/Dashboard";
 import QuestionList from "./admin/QuestionList";
 import AddQuestion from "./admin/AddQuestion";
 import EditQuestion from "./admin/EditQuestion";
+import DeveloperDashboard from "./admin/DeveloperDashboard";
 
 // Protected route component
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -53,6 +55,7 @@ function App() {
         {/* These handle questions added by the Admin via the backend */}
         <Route path="/quiz/:categoryName" element={<Quiz />} />
         <Route path="/result" element={<Result />} />
+        <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
         
         {/* --- Discovery Routes (Hardcoded Frontend) --- */}
         <Route path="/science" element={<Science />} />
@@ -101,6 +104,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditQuestion />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="developer"
+            element={
+              <ProtectedRoute>
+                <DeveloperDashboard />
               </ProtectedRoute>
             }
           />

@@ -19,6 +19,12 @@ export const createUserApi = (data) =>
 export const updateUserApi = (id, data) =>
   API.put(`/api/user/update/${id}`, data);
 
+export const logoutUserApi = (id) =>
+  API.post(`/api/user/logout/${id}`);
+
+export const getActiveUsersApi = () =>
+  API.get("/api/user/getactiveusers");
+
 export const forgotPasswordApi = (data) =>
   API.post("/api/user/forgot-password", data);
 
@@ -51,5 +57,15 @@ export const updateQuestionApi = (id, data) =>
 // 6. DELETE QUESTION
 export const deleteQuestionApi = (id) =>
   API.delete(`/api/questions/${id}`);
+
+
+/* ================= RESULTS ================= */
+
+export const saveResultApi = (data) =>
+  API.post("/api/results/add", data);
+
+export const getUserResultsApi = (userId) =>
+  API.get(`/api/results/user/${userId}`);
+
 
 export default API;

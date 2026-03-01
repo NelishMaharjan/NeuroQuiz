@@ -70,15 +70,11 @@ const Geography = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans p-6 flex flex-col items-center justify-center">
-      {/* Breadcrumb Navigation */}
-      <div className="absolute top-8 left-8 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]">
-        <span className="text-slate-400 cursor-pointer hover:text-slate-900 transition" onClick={() => navigate("/")}>NeuroQuiz</span>
-        <span className="text-slate-300">/</span>
-        <span className="text-indigo-600">Geography</span>
-      </div>
-
-      <div className="w-full max-w-2xl bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-indigo-500/5 relative overflow-hidden">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans pt-32 pb-12 px-6 flex flex-col items-center">
+      
+      <div className="w-full max-w-2xl bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/40 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-900/5" />
+        
         {showScore ? (
           <div className="text-center space-y-6 py-8">
             <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-3xl rotate-12 flex items-center justify-center text-3xl mx-auto mb-4 border border-indigo-100">🌍</div>

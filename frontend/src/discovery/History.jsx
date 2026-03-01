@@ -34,38 +34,33 @@ const History = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans p-6">
-      <nav className="max-w-4xl mx-auto flex items-center justify-between h-16 mb-12">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
-            <span className="text-white text-xs font-bold">∑</span>
-          </div>
-          <span className="text-lg font-bold tracking-tight uppercase">Math_Quiz</span>
-        </div>
-        <button onClick={() => navigate("/")} className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900">Exit</button>
-      </nav>
-
-      <main className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans pt-32 pb-12 px-6 flex flex-col items-center">
+      <main className="w-full max-w-2xl mx-auto">
         {showScore ? (
-          <div className="bg-white border border-slate-200 p-12 rounded-[3rem] text-center shadow-xl shadow-slate-100">
+          <div className="bg-white border border-slate-200/60 p-12 rounded-[3rem] text-center shadow-2xl shadow-slate-200/40 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-900/5" />
             <h2 className="text-4xl font-bold mb-4 tracking-tighter uppercase italic">Quiz Complete</h2>
             <p className="text-slate-500 mb-8 text-lg font-medium">Final Score: <span className="text-slate-900 font-bold">{score} / {questions.length}</span></p>
             <button 
               onClick={() => window.location.reload()} 
-              className="px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition active:scale-95 shadow-lg"
+              className="px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition active:scale-95 shadow-lg shadow-slate-900/10"
             >
               Restart Session
             </button>
           </div>
         ) : (
           <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400">Question {currentQuestion + 1}</span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900">Points: {score}</span>
+            <div className="flex justify-between items-center px-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">History Module</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900">Score: {score}</span>
             </div>
             
-            <div className="bg-white border border-slate-200 p-10 rounded-[2.5rem] shadow-sm">
-              <h2 className="text-2xl font-bold leading-tight mb-8">
+            <div className="bg-white border border-slate-200/60 p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/40 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-900/5" />
+              <div className="flex justify-between items-center mb-6">
+                 <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Question {currentQuestion + 1} of {questions.length}</span>
+              </div>
+              <h2 className="text-2xl font-bold leading-tight mb-10 text-slate-900">
                 {questions[currentQuestion].q}
               </h2>
 
@@ -74,7 +69,7 @@ const History = () => {
                   <button
                     key={i}
                     onClick={() => handleAnswer(i)}
-                    className="w-full text-left p-5 rounded-2xl border border-slate-100 hover:border-slate-900 hover:bg-slate-50 transition-all font-medium text-slate-600 hover:text-slate-900"
+                    className="w-full text-left p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-slate-900 hover:bg-white transition-all font-bold text-slate-600 hover:text-slate-900"
                   >
                     {option}
                   </button>

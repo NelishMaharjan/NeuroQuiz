@@ -1,11 +1,11 @@
-const User = require("../models/userModel");
+const { User } = require("../database/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { sendResetEmail } = require("../helpers/mailer");
 
 const addUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
     if (!username || !email || !password) {
       return res.status(400).json({
         message: "All fields are required",
@@ -26,6 +26,7 @@ const addUser = async (req, res) => {
       username,
       email,
       password: hassed,
+      role: role || "user"
     });
 
     res.status(201).json({
@@ -108,7 +109,18 @@ const updateUser=async(req,res)=>{
 }
 
 const getActiveUsers = async (req, res) => {
-  res.json({ message: "Get active users - to be implemented" });
+  try {
+    const users = await User.findAll({ 
+      attributes: { exclude: ["password", "resetPasswordToken", "resetPasswordExpires"] },
+      order: [
+        ['isOnline', 'DESC'],
+        ['lastActive', 'DESC']
+      ]
+    });
+    res.status(200).json({ message: "Users retrieved successfully", users });
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving users", error: error.message });
+  }
 };
 
 const deleteUser = async (req, res) => {
@@ -161,6 +173,9 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Update status to online
+    await user.update({ isOnline: true, lastActive: new Date() });
+
     const token = jwt.sign(
       {
         id: user.id,
@@ -175,7 +190,7 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user.id, username: user.username, email: user.email }
+      user: { id: user.id, username: user.username, email: user.email, role: user.role }
     });
         
   } catch (error) {
@@ -256,4 +271,17 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { addUser, getAllUsers, getActiveUsers, getUserById , updateUser, deleteUser, loginUser, forgotPassword, resetPassword};
+const logoutUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    if (user) {
+      await user.update({ isOnline: false, lastActive: new Date() });
+    }
+    res.json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error during logout", error: error.message });
+  }
+};
+
+module.exports = { addUser, getAllUsers, getActiveUsers, getUserById , updateUser, deleteUser, loginUser, forgotPassword, resetPassword, logoutUser};

@@ -18,6 +18,7 @@ app.use(express.json());
 // 2. Routes
 app.use("/api/user", require("./routes/route"));
 app.use("/api/questions", require("./routes/questionRoute"));
+app.use("/api/results", require("./routes/resultRoute"));
 
 app.get('/', (req, res) => {
     res.json('Welcome to the neuroquiz API');

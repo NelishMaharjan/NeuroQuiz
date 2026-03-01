@@ -44,21 +44,14 @@ const Technology = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans p-6 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans pt-32 pb-12 px-6 flex flex-col items-center relative overflow-hidden">
       {/* Tech Grid Overlay */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
            style={{ backgroundImage: `radial-gradient(#000 1px, transparent 1px)`, backgroundSize: '30px 30px' }}>
       </div>
 
-      <button 
-        onClick={() => navigate("/")}
-        className="absolute top-8 left-8 z-10 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition flex items-center gap-2"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Back to Hub
-      </button>
-
-      <div className="w-full max-w-2xl bg-white/80 backdrop-blur-md border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-blue-500/5 relative z-10">
+      <div className="w-full max-w-2xl bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/40 relative z-10 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-900/5" />
         {showScore ? (
           <div className="text-center space-y-8 py-4">
             <div className="relative w-32 h-32 mx-auto flex items-center justify-center">

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { saveResultApi } from '../services/api';
 
 const Result = () => {
   const location = useLocation();
@@ -7,6 +8,26 @@ const Result = () => {
 
   const { score, total, category } = location.state || { score: 0, total: 0, category: "Unknown" };
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+
+  useEffect(() => {
+    const saveResult = async () => {
+      const savedUser = localStorage.getItem("user");
+      if (savedUser && location.state) {
+        const user = JSON.parse(savedUser);
+        try {
+          await saveResultApi({
+            userId: user.id,
+            category,
+            score,
+            totalQuestions: total
+          });
+        } catch (error) {
+          console.error("Failed to save result", error);
+        }
+      }
+    };
+    saveResult();
+  }, [category, score, total, location.state]);
 
   const getMessage = () => {
     if (percentage === 100) return "Master of Intelligence! 🧠";

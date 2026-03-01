@@ -76,12 +76,11 @@ const Science = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans p-6 flex flex-col items-center justify-center">
-      <button onClick={() => navigate("/")} className="absolute top-8 left-8 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition">
-        ← Back to Home
-      </button>
-
-      <div className="w-full max-w-2xl bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-slate-200/50">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 font-sans pt-32 pb-12 px-6 flex flex-col items-center">
+      
+      <div className="w-full max-w-2xl bg-white border border-slate-200/60 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/40 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-900/5" />
+        
         {showScore ? (
           <div className="text-center space-y-6">
             <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto">🧬</div>
