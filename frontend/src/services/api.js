@@ -19,6 +19,12 @@ export const createUserApi = (data) =>
 export const updateUserApi = (id, data) =>
   API.put(`/api/user/update/${id}`, data);
 
+export const forgotPasswordApi = (data) =>
+  API.post("/api/user/forgot-password", data);
+
+export const resetPasswordApi = (data) =>
+  API.post("/api/user/reset-password", data);
+
 
 /* ================= QUESTIONS ================= */
 

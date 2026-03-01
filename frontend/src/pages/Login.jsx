@@ -102,6 +102,16 @@ const Login = () => {
               onTogglePassword={() => setShowPassword(!showPassword)}
             />
 
+            <div className="flex justify-end -mt-2">
+              <button 
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+                className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors"
+              >
+                Forgot Password?
+              </button>
+            </div>
+
             <button
               type="submit"
               disabled={loading}

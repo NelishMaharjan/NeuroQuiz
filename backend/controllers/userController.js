@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { sendResetEmail } = require("../helpers/mailer");
 
 const addUser = async (req, res) => {
   try {
@@ -185,7 +186,74 @@ const loginUser = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
+    // Generate a simple 6-digit token for this demo/test
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Set expiry to 10 minutes from now
+    const resetExpires = new Date(Date.now() + 10 * 60 * 1000);
 
-module.exports = { addUser, getAllUsers, getActiveUsers, getUserById , updateUser, deleteUser, loginUser};
+    await user.update({
+      resetPasswordToken: resetToken,
+      resetPasswordExpires: resetExpires
+    });
+
+    const emailSent = await sendResetEmail(email, resetToken);
+
+    if (!emailSent) {
+      return res.status(500).json({ success: false, message: "Error sending recovery email" });
+    }
+
+    return res.json({ 
+      success: true, 
+      message: "Recovery code sent to your email"
+    });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Error in forgot password", error: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, token, newPassword } = req.body;
+
+    const user = await User.findOne({ 
+      where: { 
+        email,
+        resetPasswordToken: token
+      } 
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid token or email" });
+    }
+
+    if (new Date() > user.resetPasswordExpires) {
+      return res.status(400).json({ message: "Token has expired" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await user.update({
+      password: hashedPassword,
+      resetPasswordToken: null,
+      resetPasswordExpires: null
+    });
+
+    return res.json({ success: true, message: "Password reset successful" });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Error resetting password", error: error.message });
+  }
+};
+
+module.exports = { addUser, getAllUsers, getActiveUsers, getUserById , updateUser, deleteUser, loginUser, forgotPassword, resetPassword};
