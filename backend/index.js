@@ -23,15 +23,22 @@ app.get('/', (req, res) => {
     res.json('Welcome to the neuroquiz API');
 });
 
+const PORT = process.env.PORT || 3000;
+
 const startServer = async () => {
     try {
         await connectDB();
         await sequelize.sync({ alter: true }); 
-        app.listen(3000, () => {
-            console.log('Server is running on http://localhost:3000');
-        });
+        if (process.env.NODE_ENV !== 'test') {
+            app.listen(PORT, () => {
+                console.log(`Server is running on http://localhost:${PORT}`);
+            });
+        }
     } catch (error) {
         console.error("Failed to start server:", error);
     }
 }
+
 startServer();
+
+module.exports = app;

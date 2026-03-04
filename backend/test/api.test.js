@@ -1,7 +1,5 @@
 const request = require('supertest');
-require('dotenv').config();
-
-const BASE_URL = `http://localhost:3000`;
+const app = require('../index');
 
 describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
     let testUser = {
@@ -15,7 +13,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 1. User Registration
     it('1. should register a new user successfully', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .post('/api/user/register')
             .send(testUser);
 
@@ -26,7 +24,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 2. Prevent Duplicate Registration
     it('2. should not allow duplicate user registration', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .post('/api/user/register')
             .send(testUser);
 
@@ -36,7 +34,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 3. User Login
     it('3. should log in successfully and return a token', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .post('/api/user/login')
             .send({
                 email: testUser.email,
@@ -51,7 +49,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 4. Invalid Login
     it('4. should fail login with incorrect password', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .post('/api/user/login')
             .send({
                 email: testUser.email,
@@ -64,7 +62,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 5. Update User Profile
     it('5. should update user profile details', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .put(`/api/user/update/${testUserId}`)
             .send({ username: `${testUser.username}_updated` });
 
@@ -74,7 +72,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 6. Forgot Password (Token Generation)
     it('6. should initiate forgot password process', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .post('/api/user/forgot-password')
             .send({ email: testUser.email });
 
@@ -84,7 +82,7 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 7. Question Creation (Admin Simulation)
     it('7. should create a new quiz question', async () => {
-        const res = await request(BASE_URL)
+        const res = await request(app)
             .post('/api/questions/add')
             .send({
                 questionText: "What is 2 + 2?",
@@ -101,21 +99,21 @@ describe('NeuroQuiz API Integration Tests (Comprehensive Suite)', () => {
 
     // 8. Fetch All Questions
     it('8. should retrieve all quiz questions', async () => {
-        const res = await request(BASE_URL).get('/api/questions');
+        const res = await request(app).get('/api/questions');
         expect(res.status).toBe(200);
         expect(Array.isArray(res.body)).toBe(true);
     });
 
     // 9. Fetch Questions by Category
     it('9. should retrieve questions by specific category', async () => {
-        const res = await request(BASE_URL).get('/api/questions/category/Math');
+        const res = await request(app).get('/api/questions/category/Math');
         expect(res.status).toBe(200);
         expect(res.body.length).toBeGreaterThan(0);
     });
 
     // 10. Question Deletion
     it('10. should delete a quiz question', async () => {
-        const res = await request(BASE_URL).delete(`/api/questions/${testQuestionId}`);
+        const res = await request(app).delete(`/api/questions/${testQuestionId}`);
         expect(res.status).toBe(200);
         expect(res.body.message).toBe('Question deleted');
     });
