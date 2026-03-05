@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getAllQuestionsApi, deleteQuestionApi } from "../services/api";
+import { getAllQuestionsApi, deleteQuestionApi, approveQuestionApi } from "../services/api";
 import Navbar from "../components/Navbar";
 
 const QuestionList = () => {
@@ -58,6 +58,16 @@ const QuestionList = () => {
       direction = "desc";
     }
     setSortConfig({ key, direction });
+  };
+
+  const handleApprove = async (id) => {
+    try {
+      await approveQuestionApi(id);
+      toast.success("Question approved and contributor rewarded! 🏆");
+      fetchQuestions();
+    } catch {
+      toast.error("Approval failed");
+    }
   };
 
   const handleDelete = async (id) => {
@@ -150,6 +160,7 @@ const QuestionList = () => {
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
                     </div>
                   </th>
+                  <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
                   <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
@@ -164,8 +175,24 @@ const QuestionList = () => {
                         {typeof q.category === "object" ? q.category?.name : q.category}
                       </span>
                     </td>
+                    <td className="px-8 py-6 text-center">
+                      {q.isApproved ? (
+                        <span className="text-[9px] font-black uppercase text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100">Verified</span>
+                      ) : (
+                        <span className="text-[9px] font-black uppercase text-amber-500 bg-amber-50 px-2 py-1 rounded-md border border-amber-100 animate-pulse">Pending</span>
+                      )}
+                    </td>
                     <td className="px-8 py-6 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        {!q.isApproved && (
+                          <button
+                            onClick={() => handleApprove(q.id || q._id)}
+                            className="w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20"
+                            title="Approve"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => navigate(`/admin/questions/edit/${q.id || q._id}`)}
                           className="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition-all shadow-sm"
@@ -186,7 +213,7 @@ const QuestionList = () => {
                 ))}
                 {processedQuestions.length === 0 && (
                   <tr>
-                    <td colSpan="3" className="px-8 py-20 text-center">
+                    <td colSpan="4" className="px-8 py-20 text-center">
                       <div className="flex flex-col items-center gap-4">
                         <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">
                           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>

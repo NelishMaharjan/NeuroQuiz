@@ -16,17 +16,31 @@ export const loginUserApi = (data) =>
 export const createUserApi = (data) =>
   API.post("/api/user/register", data);
 
-export const updateUserApi = (id, data) =>
-  API.put(`/api/user/update/${id}`, data);
+export const updateUserApi = (id, data) => {
+  if (data instanceof FormData) {
+    return API.put(`/api/user/update/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+  return API.put(`/api/user/update/${id}`, data);
+};
 
 export const logoutUserApi = (id) =>
   API.post(`/api/user/logout/${id}`);
 
-export const getActiveUsersApi = () =>
-  API.get("/api/user/getactiveusers");
+export const getAllUsersApi = () =>
+  API.get("/api/user/all");
 
 export const deleteUserApi = (id) =>
   API.delete(`/api/user/delete/${id}`);
+
+export const changeUserRoleApi = (id, role, adminId) =>
+  API.put(`/api/user/change-role/${id}`, { role, adminId });
+
+export const getActiveUsersApi = () =>
+  API.get("/api/user/getactiveusers");
 
 export const forgotPasswordApi = (data) =>
   API.post("/api/user/forgot-password", data);
@@ -49,9 +63,17 @@ export const getQuestionsByCategoryApi = (category) =>
 export const getQuestionByIdApi = (id) =>
   API.get(`/api/questions/${id}`);
 
-// 4. ADD QUESTION
+// 4. ADD QUESTION (Admin)
 export const createQuestionApi = (data) =>
   API.post("/api/questions/add", data);
+
+// 4b. SUBMIT QUESTION (User)
+export const submitQuestionApi = (data) =>
+  API.post("/api/questions/submit", data);
+
+// 4c. APPROVE QUESTION (Admin)
+export const approveQuestionApi = (id) =>
+  API.put(`/api/questions/approve/${id}`);
 
 // 5. UPDATE QUESTION
 export const updateQuestionApi = (id, data) =>
@@ -69,6 +91,10 @@ export const saveResultApi = (data) =>
 
 export const getUserResultsApi = (userId) =>
   API.get(`/api/results/user/${userId}`);
+
+/* ================= SYSTEM ================= */
+export const getSystemStatsApi = () =>
+  API.get("/api/user/stats");
 
 
 export default API;

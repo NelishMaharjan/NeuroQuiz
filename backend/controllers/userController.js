@@ -77,7 +77,7 @@ const getUserById = async (req, res) => {
 const updateUser=async(req,res)=>{
     try{
         const {id}=req.params;
-        const {username,email,password}=req.body;
+        const {username,email,password,xp,level}=req.body;
         const user=await User.findByPk(id);
         if(!user){
             return res.status(404).json({message:"User not found"});
@@ -93,12 +93,20 @@ const updateUser=async(req,res)=>{
         if(password){
             hassedPassword=await bcrypt.hash(password,10);
         }
-        await user.update({
-            username : username || user.username,
-            email : email || user.email,
-            password:hassedPassword
 
-        });
+        const updatedData = {
+          username : username || user.username,
+          email : email || user.email,
+          password:hassedPassword,
+          xp: xp || user.xp,
+          level: level || user.level
+        };
+
+        if (req.file) {
+          updatedData.profileImage = req.file.path;
+        }
+
+        await user.update(updatedData);
         res.json({message:"User updated successfully",user});
     }catch(error){
         return res.status(500).json ({
@@ -190,7 +198,15 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user.id, username: user.username, email: user.email, role: user.role }
+      user: { 
+        id: user.id, 
+        username: user.username, 
+        email: user.email, 
+        role: user.role,
+        profileImage: user.profileImage,
+        xp: user.xp,
+        level: user.level
+      }
     });
         
   } catch (error) {
@@ -284,4 +300,29 @@ const logoutUser = async (req, res) => {
   }
 };
 
-module.exports = { addUser, getAllUsers, getActiveUsers, getUserById , updateUser, deleteUser, loginUser, forgotPassword, resetPassword, logoutUser};
+const changeUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role, adminId } = req.body; // Expecting adminId to verify who is making the change
+
+    if (!["user", "admin", "developer"].includes(role)) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
+    // Security: Find the person attempting the change
+    const requester = await User.findByPk(adminId);
+    if (!requester || requester.role !== 'developer') {
+      return res.status(403).json({ message: "Access Denied: Only Developers can modify authority levels" });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    await user.update({ role });
+    res.json({ message: `User role updated to ${role}`, user });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating role", error: error.message });
+  }
+};
+
+module.exports = { addUser, getAllUsers, getActiveUsers, getUserById , updateUser, deleteUser, loginUser, forgotPassword, resetPassword, logoutUser, changeUserRole};

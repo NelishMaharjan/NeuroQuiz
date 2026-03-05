@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM("easy", "medium", "hard"),
         defaultValue: "easy",
       },
+      isApproved: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+      submittedBy: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
     });
   
     return Question;

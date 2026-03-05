@@ -8,8 +8,9 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import UserDashboard from "./pages/UserDashboard";
-import Quiz from "./pages/Quiz"; // 🔥 Added
-import Result from "./pages/Result"; // 🔥 Added
+import Quiz from "./pages/Quiz"; 
+import Result from "./pages/Result";
+import ContributeQuestion from "./pages/ContributeQuestion";
 
 // Discovery/Quiz pages (Static Frontend)
 import Science from "./discovery/Science";
@@ -23,14 +24,18 @@ import QuestionList from "./admin/QuestionList";
 import AddQuestion from "./admin/AddQuestion";
 import EditQuestion from "./admin/EditQuestion";
 import DeveloperDashboard from "./admin/DeveloperDashboard";
+import UserList from "./admin/UserList";
+import GlobalAnalytics from "./admin/GlobalAnalytics";
 
 // Protected route component
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import NeuralBackground from "./components/NeuralBackground";
 
 function App() {
   return (
     <Router>
+      <NeuralBackground />
       <Navbar />
       <Toaster 
         position="top-right" 
@@ -52,10 +57,10 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
         {/* --- Dynamic User Quiz Routes --- */}
-        {/* These handle questions added by the Admin via the backend */}
         <Route path="/quiz/:categoryName" element={<Quiz />} />
         <Route path="/result" element={<Result />} />
         <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
+        <Route path="/contribute" element={<ProtectedRoute><ContributeQuestion /></ProtectedRoute>} />
         
         {/* --- Discovery Routes (Hardcoded Frontend) --- */}
         <Route path="/science" element={<Science />} />
@@ -108,6 +113,22 @@ function App() {
             }
           />
           <Route
+            path="users"
+            element={
+              <ProtectedRoute>
+                <UserList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="analytics"
+            element={
+              <ProtectedRoute>
+                <GlobalAnalytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="developer"
             element={
               <ProtectedRoute>
@@ -119,10 +140,10 @@ function App() {
 
         {/* 404 - Page Not Found */}
         <Route path="*" element={
-          <div className="flex flex-col items-center justify-center min-h-screen bg-[#fafafa]">
+          <div className="flex flex-col items-center justify-center min-h-screen">
             <h1 className="text-4xl font-black text-slate-900">404</h1>
-            <p className="text-slate-500 font-medium">Page not found.</p>
-            <button onClick={() => window.location.href="/"} className="mt-4 text-blue-600 font-bold uppercase text-[10px] tracking-widest">Return Home</button>
+            <p className="text-slate-400 font-medium">Protocol not found.</p>
+            <button onClick={() => window.location.href="/"} className="mt-4 text-slate-900 font-black uppercase text-[10px] tracking-widest">Return Home</button>
           </div>
         } />
       </Routes>

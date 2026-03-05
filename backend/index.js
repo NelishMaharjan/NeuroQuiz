@@ -6,7 +6,12 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const {connectDB, sequelize} = require('./database/database');
 
+const path = require('path');
+
 const app = express();
+
+// Serve static files
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // 1. Security headers
 app.use(helmet());

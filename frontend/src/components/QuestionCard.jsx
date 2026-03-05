@@ -15,7 +15,7 @@ const QuestionCard = ({ question, selectedOption, onSelect, isDisabled }) => {
         {question.options && question.options.map((opt, i) => {
           const isSelected = selectedOption === opt;
           const isCorrect = opt === question.correctAnswer;
-          const showResult = isDisabled; // If disabled, it means an answer was chosen or time ran out
+          const showResult = isDisabled;
 
           let buttonClass = "bg-white border-slate-200 text-slate-600 hover:border-slate-900 hover:bg-slate-50";
           
@@ -34,17 +34,18 @@ const QuestionCard = ({ question, selectedOption, onSelect, isDisabled }) => {
               key={i}
               disabled={isDisabled}
               onClick={() => onSelect(opt)}
-              className={`group relative p-6 rounded-3xl border-2 text-left transition-all duration-200 font-bold text-sm md:text-base ${buttonClass} active:scale-[0.98]`}
+              style={{ animationDelay: `${i * 100}ms` }}
+              className={`group relative p-6 rounded-3xl border-2 text-left transition-all duration-200 font-bold text-sm md:text-base ${buttonClass} active:scale-[0.98] animate-staggeredFadeIn`}
             >
               <div className="flex items-center justify-between">
                 <span>{opt}</span>
                 {showResult && isCorrect && (
-                  <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-[10px]">
+                  <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-[10px] animate-fadeIn">
                     ✓
                   </span>
                 )}
                 {showResult && isSelected && !isCorrect && (
-                  <span className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">
+                  <span className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] animate-fadeIn">
                     ✕
                   </span>
                 )}
