@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSystemStatsApi } from "../services/api";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -36,10 +37,10 @@ const Home = () => {
   }, []);
 
   const categories = [
-    { name: "Science", icon: "🧬", count: "ACTIVE", color: "bg-blue-50 text-blue-600 border-blue-100" },
-    { name: "History", icon: "📜", count: "ACTIVE", color: "bg-amber-50 text-amber-600 border-amber-100" },
-    { name: "Technology", icon: "💻", count: "ACTIVE", color: "bg-purple-50 text-purple-600 border-purple-100" },
-    { name: "Geography", icon: "🌍", count: "ACTIVE", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+    { name: "Science", icon: "🧬", count: "MODULE v1.0", color: "bg-blue-50 text-blue-600 border-blue-100" },
+    { name: "History", icon: "📜", count: "MODULE v1.0", color: "bg-amber-50 text-amber-600 border-amber-100" },
+    { name: "Technology", icon: "💻", count: "MODULE v2.1", color: "bg-purple-50 text-purple-600 border-purple-100" },
+    { name: "Geography", icon: "🌍", count: "MODULE v1.0", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
   ];
 
   return (
@@ -79,7 +80,14 @@ const Home = () => {
                   </button>
                 ) : (
                   <button 
-                    onClick={() => navigate("/contribute")}
+                    onClick={() => {
+                      if (!user) {
+                        toast.error("Please log in to contribute questions.");
+                        navigate("/login");
+                      } else {
+                        navigate("/contribute");
+                      }
+                    }}
                     className="px-8 py-4 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 active:scale-95"
                   >
                     Add a Question
@@ -168,7 +176,7 @@ const Home = () => {
                 key={i} 
                 onClick={() => navigate(`/${cat.name}`)}
                 style={{ animationDelay: `${i * 100 + 200}ms` }}
-                className="group relative bg-white border border-slate-200/60 p-8 rounded-[2.5rem] cursor-pointer hover:border-slate-900 hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-slate-200/30 animate-fadeIn"
+                className="group relative bg-white border border-slate-200/60 p-8 rounded-[2.5rem] cursor-pointer hover:border-slate-900 hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-slate-200/30 hover:shadow-2xl hover:shadow-slate-500/20 animate-fadeIn"
               >
                 <div className={`w-14 h-14 rounded-2xl ${cat.color} border flex items-center justify-center text-2xl mb-8 group-hover:scale-110 transition-transform shadow-sm`}>
                   {cat.icon}

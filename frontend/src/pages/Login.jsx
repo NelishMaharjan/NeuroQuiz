@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { loginUserApi } from "../services/api";
 import InputField from "../components/InputField";
@@ -135,12 +135,12 @@ const Login = () => {
           <div className="mt-10 pt-8 border-t border-slate-100 text-center">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
               New to NeuroQuiz?{" "}
-              <button
-                onClick={() => navigate("/register")}
+              <Link
+                to="/register"
                 className="text-slate-900 hover:underline transition-all underline-offset-4"
               >
                 Create Account
-              </button>
+              </Link>
             </p>
           </div>
         </div>

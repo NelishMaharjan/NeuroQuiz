@@ -25,7 +25,7 @@ const InputField = ({
           onChange={onChange}
           placeholder={placeholder}
           className={`w-full px-4 py-3 rounded-xl border text-slate-800 bg-slate-50/50
-            ${error ? "border-red-400 ring-1 ring-red-400" : "border-slate-200 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5"}
+            ${error ? "border-red-400 ring-1 ring-red-400 focus:ring-2 focus:ring-red-500 focus:bg-white" : "border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-800 focus:bg-white"}
             outline-none transition-all duration-200 font-medium placeholder:text-slate-400`}
         />
         {showPasswordToggle && (

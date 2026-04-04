@@ -134,7 +134,7 @@ function Navbar() {
               onClick={() => navigate("/login")} 
               className="px-8 py-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-900/10"
             >
-              Initialize
+              &gt;_ Sign In
             </button>
           )}
         </div>
