@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
   // Ensure this matches your server.js port (3000)
-  baseURL: "http://localhost:3000", 
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000", 
   headers: {
     "Content-Type": "application/json",
   },

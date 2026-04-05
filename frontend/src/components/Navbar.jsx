@@ -33,7 +33,7 @@ function Navbar() {
     window.location.href = "/login";
   };
 
-  const profileImageUrl = user?.profileImage ? `http://localhost:3000/${user.profileImage}` : null;
+  const profileImageUrl = user?.profileImage ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/${user.profileImage}` : null;
 
   return (
     <nav className="fixed top-0 w-full z-[100] bg-white/80 backdrop-blur-xl border-b border-slate-100">

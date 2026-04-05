@@ -14,6 +14,7 @@ const Home = () => {
     load: 0,
     serverStatus: "LIVE"
   });
+  const [statsError, setStatsError] = useState(false);
   
   const savedUser = localStorage.getItem("user");
   const user = savedUser ? JSON.parse(savedUser) : null;
@@ -24,9 +25,11 @@ const Home = () => {
         const res = await getSystemStatsApi();
         if (res.data.success) {
           setStats(res.data.stats);
+          setStatsError(false);
         }
       } catch (error) {
         console.error("Failed to fetch system stats", error);
+        setStatsError(true);
       }
     };
     fetchStats();
@@ -122,28 +125,30 @@ const Home = () => {
                 <div>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Global Score Average</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-black text-white">{stats.globalPrecision}%</span>
-                    <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest italic animate-pulse">● {stats.serverStatus}</span>
+                    <span className="text-4xl font-black text-white">{statsError ? "--" : `${stats.globalPrecision}%`}</span>
+                    <span className={`text-xs font-bold uppercase tracking-widest italic animate-pulse ${statsError ? 'text-red-400' : 'text-emerald-400'}`}>
+                      ● {statsError ? "OFFLINE" : stats.serverStatus}
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-4 mt-8">
                   <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                     <span>Server Status</span>
-                    <span>{stats.load}% OK</span>
+                    <span>{statsError ? "ERROR" : `${stats.load}% OK`}</span>
                   </div>
                   <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-cyan-500 transition-all duration-1000" 
-                      style={{ width: `${stats.load}%` }} 
+                      className={`h-full transition-all duration-1000 ${statsError ? 'bg-red-500' : 'bg-cyan-500'}`} 
+                      style={{ width: `${statsError ? 100 : stats.load}%` }} 
                     />
                   </div>
                   <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                     <span>Online Players</span>
-                    <span>{stats.activeUsers}</span>
+                    <span>{statsError ? "--" : stats.activeUsers}</span>
                   </div>
                   <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                     <span>Total Quizzes Done</span>
-                    <span>{stats.totalResults}</span>
+                    <span>{statsError ? "--" : stats.totalResults}</span>
                   </div>
                 </div>
               </div>
